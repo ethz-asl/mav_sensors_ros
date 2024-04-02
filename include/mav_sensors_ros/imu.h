@@ -2,8 +2,8 @@
 
 #include <deque>
 
-#include <mav_sensors_drivers/imu/bmi088.h>
 #include <mav_sensors_core/common/vec.h>
+#include <mav_sensors_drivers/imu/bmi088.h>
 #include <ros/ros.h>
 #include <std_srvs/Trigger.h>
 
@@ -19,7 +19,7 @@ class Imu : public BaseSensor {
   ros::Publisher imu_pub_, bias_pub_;
   ros::ServiceServer calibrate_srv_;
   std::deque<mav_sensors::vec3<double>> omega_;
-  mav_sensors::vec3<double> b_g_ {0.0, 0.0, 0.0};
+  mav_sensors::vec3<double> b_g_{0.0, 0.0, 0.0};
   int bias_samples_ = 0;
 
  public:

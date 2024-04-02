@@ -38,7 +38,8 @@ void Baro::readSensor() {
   // Read sensor data.
   auto measurement = baro_.read();
 
-  if (std::get<0>(measurement).has_value() && std::get<2>(measurement).has_value()) {
+  if (std::get<0>(measurement).has_value() &&
+      std::get<2>(measurement).has_value()) {
     // Publish pressure measurements.
     LOG_FIRST(I, 1, "Publishing first pressure measurement.");
     sensor_msgs::FluidPressure msg;
@@ -47,7 +48,8 @@ void Baro::readSensor() {
     msg.fluid_pressure = std::get<0>(measurement).value();
     baro_pub_.publish(msg);
   }
-  if (std::get<1>(measurement).has_value() && std::get<2>(measurement).has_value()) {
+  if (std::get<1>(measurement).has_value() &&
+      std::get<2>(measurement).has_value()) {
     // Publish temperature measurements.
     LOG_FIRST(I, 1, "Publishing first temperature measurement.");
     sensor_msgs::Temperature msg;

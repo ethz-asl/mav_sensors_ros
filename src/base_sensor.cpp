@@ -5,7 +5,8 @@
 
 using namespace mav_sensors_ros;
 
-BaseSensor::BaseSensor(const ros::NodeHandle& nh_private) : nh_private_(nh_private) {}
+BaseSensor::BaseSensor(const ros::NodeHandle& nh_private)
+    : nh_private_(nh_private) {}
 
 bool BaseSensor::init() {
   // Open sensor.
@@ -29,7 +30,8 @@ bool BaseSensor::init() {
     LOG(F, "Failed to read rate.");
     return false;
   }
-  timer_ = nh_private_.createTimer(ros::Duration(1.0 / poll_rate), &BaseSensor::timerCallback, this);
+  timer_ = nh_private_.createTimer(ros::Duration(1.0 / poll_rate),
+                                   &BaseSensor::timerCallback, this);
 
   return true;
 }
