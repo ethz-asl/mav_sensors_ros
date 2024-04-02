@@ -1,3 +1,4 @@
+/*
 BSD 3-Clause License
 
 Copyright (c) 2024 ETH Zurich, Autonomous Systems Lab, Rik Girod
@@ -26,3 +27,36 @@ SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
 CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+*/
+#pragma once
+
+#include <deque>
+
+#include <mav_sensors_core/common/vec.h>
+#include <mav_sensors_drivers/imu/bmi088.h>
+#include <ros/ros.h>
+#include <std_srvs/Trigger.h>
+
+#include "mav_sensors_ros/base_sensor.h"
+
+namespace mav_sensors_ros {
+class Imu : public BaseSensor {
+ private:
+  void readSensor() override;
+  bool openSensor() override;
+
+  mav_sensors::Bmi088<mav_sensors::Spi> imu_;
+  ros::Publisher imu_pub_, bias_pub_;
+  ros::ServiceServer calibrate_srv_;
+  std::deque<mav_sensors::vec3<double>> omega_;
+  mav_sensors::vec3<double> b_g_{0.0, 0.0, 0.0};
+  int bias_samples_ = 0;
+
+ public:
+  Imu(const ros::NodeHandle& nh_private);
+  ~Imu();
+
+  bool calibrate(std_srvs::Trigger::Request& req,
+                 std_srvs::Trigger::Response& res);
+};
+}  // namespace mav_sensors_ros

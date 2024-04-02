@@ -1,3 +1,4 @@
+/*
 BSD 3-Clause License
 
 Copyright (c) 2024 ETH Zurich, Autonomous Systems Lab, Rik Girod
@@ -26,3 +27,27 @@ SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
 CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+*/
+
+#pragma once
+
+#include <mav_sensors_drivers/barometer/bmp390.h>
+#include <ros/ros.h>
+
+#include "mav_sensors_ros/base_sensor.h"
+
+namespace mav_sensors_ros {
+class Baro : public BaseSensor {
+ private:
+  void readSensor() override;
+  bool openSensor() override;
+
+  mav_sensors::BMP390<mav_sensors::Spi> baro_;
+  ros::Publisher baro_pub_;
+  ros::Publisher temp_pub_;
+
+ public:
+  Baro(const ros::NodeHandle& nh_private);
+  ~Baro();
+};
+}  // namespace mav_sensors_ros

@@ -1,0 +1,19 @@
+<library path="lib/libmav_sensors_ros_nodelet">
+  <class type="mav_sensors_ros::BaroNodelet" base_class_type="nodelet::Nodelet">
+    <description>
+      A timer based nodelet that publishes barometer data.
+    </description>
+  </class>
+  
+  <class type="mav_sensors_ros::ImuNodelet" base_class_type="nodelet::Nodelet">
+    <description>
+      A timer based nodelet that publishes IMU data.
+    </description>
+  </class>
+  
+  <class type="mav_sensors_ros::RadarNodelet" base_class_type="nodelet::Nodelet">
+    <description>
+      A timer based nodelet that publishes Radar data.
+    </description>
+  </class>
+</library>
