@@ -7,9 +7,9 @@
 #include <ros/ros.h>
 #include <std_srvs/Trigger.h>
 
-#include "rio/ros/base_sensor.h"
+#include "mav_sensors_ros/base_sensor.h"
 
-namespace rio {
+namespace mav_sensors_ros {
 class Imu : public BaseSensor {
  private:
   void readSensor() override;
@@ -29,4 +29,4 @@ class Imu : public BaseSensor {
   bool calibrate(std_srvs::Trigger::Request& req,
                  std_srvs::Trigger::Response& res);
 };
-}  // namespace rio
+}  // namespace mav_sensors_ros

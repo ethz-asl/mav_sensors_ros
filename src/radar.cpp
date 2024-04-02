@@ -1,4 +1,4 @@
-#include "rio/ros/radar.h"
+#include "mav_sensors_ros/radar.h"
 
 #include <geometry_msgs/Vector3Stamped.h>
 #include <log++.h>
@@ -6,10 +6,7 @@
 #include <sensor_msgs/PointCloud2.h>
 #include <tf2_eigen/tf2_eigen.h>
 
-#include "rio/common.h"
-#include "rio/least_squares.h"
-
-using namespace rio;
+using namespace mav_sensors_ros;
 
 namespace ms = mav_sensors;
 
@@ -96,7 +93,7 @@ void Radar::readSensor() {
   LOG_FIRST(I, 1, "Publishing first radar cfar detections.");
   sensor_msgs::PointCloud2 msg;
   msg.header.stamp =
-      rio::toRosTime(std::get<ms::Radar>(measurement).unix_stamp_ns);
+      toRosTime(std::get<ms::Radar>(measurement).unix_stamp_ns);
   msg.header.frame_id = frame_id_;
   msg.height = 1;
   msg.width = std::get<ms::Radar>(measurement).cfar_detections.size();
@@ -190,12 +187,12 @@ void Radar::readSensor() {
 
   // RANSAC least squares fit to estimate linear velocity.
   Eigen::Vector3d velocity;
-  if (rio::leastSquares(std::get<ms::Radar>(measurement), &velocity)) {
+  if (leastSquares(std::get<ms::Radar>(measurement), &velocity)) {
     LOG_FIRST(I, 1, "Publishing first radar least squares velocity estimate.");
     // Publish least squares velocity estimate.
     geometry_msgs::Vector3Stamped msg_velocity;
     msg_velocity.header.stamp =
-        rio::toRosTime(std::get<ms::Radar>(measurement).unix_stamp_ns);
+        toRosTime(std::get<ms::Radar>(measurement).unix_stamp_ns);
     msg_velocity.header.frame_id = frame_id_;
     tf2::toMsg(velocity, msg_velocity.vector);
     ls_vel_pub_.publish(msg_velocity);

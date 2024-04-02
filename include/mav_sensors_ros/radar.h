@@ -6,9 +6,9 @@
 #include <mav_sensors_drivers/sensor_types/Radar.h>
 #include <Eigen/SVD>
 
-#include "rio/ros/base_sensor.h"
+#include "mav_sensors_ros/base_sensor.h"
 
-namespace rio
+namespace mav_sensors_ros
 {
   class Radar : public BaseSensor
   {
@@ -56,4 +56,4 @@ namespace rio
       }
     }
   };
-} // namespace rio
+} // namespace mav_sensors_ros

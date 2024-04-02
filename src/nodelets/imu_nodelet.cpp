@@ -4,9 +4,9 @@
 #include <nodelet/nodelet.h>
 #include <pluginlib/class_list_macros.h>
 
-#include "rio/ros/imu.h"
+#include "mav_sensors_ros/imu.h"
 
-namespace rio {
+namespace mav_sensors_ros {
 
 class ImuNodelet : public nodelet::Nodelet {
   virtual void onInit() {
@@ -20,6 +20,6 @@ class ImuNodelet : public nodelet::Nodelet {
 
   std::unique_ptr<Imu> imu_;
 };
-}  // namespace rio
+}  // namespace mav_sensors_ros
 
-PLUGINLIB_EXPORT_CLASS(rio::ImuNodelet, nodelet::Nodelet)
+PLUGINLIB_EXPORT_CLASS(mav_sensors_ros::ImuNodelet, nodelet::Nodelet)

@@ -1,13 +1,11 @@
-#include "rio/ros/baro.h"
+#include "mav_sensors_ros/baro.h"
 
 #include <log++.h>
 #include <mav_sensors_core/sensor_config.h>
 #include <sensor_msgs/FluidPressure.h>
 #include <sensor_msgs/Temperature.h>
 
-#include "rio/common.h"
-
-using namespace rio;
+using namespace mav_sensors_ros;
 
 Baro::Baro(const ros::NodeHandle& nh_private) : BaseSensor(nh_private) {}
 
@@ -44,7 +42,7 @@ void Baro::readSensor() {
     // Publish pressure measurements.
     LOG_FIRST(I, 1, "Publishing first pressure measurement.");
     sensor_msgs::FluidPressure msg;
-    msg.header.stamp = rio::toRosTime(std::get<2>(measurement).value());
+    msg.header.stamp = toRosTime(std::get<2>(measurement).value());
     msg.header.frame_id = frame_id_;
     msg.fluid_pressure = std::get<0>(measurement).value();
     baro_pub_.publish(msg);
@@ -53,7 +51,7 @@ void Baro::readSensor() {
     // Publish temperature measurements.
     LOG_FIRST(I, 1, "Publishing first temperature measurement.");
     sensor_msgs::Temperature msg;
-    msg.header.stamp = rio::toRosTime(std::get<2>(measurement).value());
+    msg.header.stamp = toRosTime(std::get<2>(measurement).value());
     msg.header.frame_id = frame_id_;
     msg.temperature = std::get<1>(measurement).value();
     temp_pub_.publish(msg);

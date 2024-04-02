@@ -3,9 +3,9 @@
 #include <mav_sensors_drivers/barometer/bmp390.h>
 #include <ros/ros.h>
 
-#include "rio/ros/base_sensor.h"
+#include "mav_sensors_ros/base_sensor.h"
 
-namespace rio {
+namespace mav_sensors_ros {
 class Baro : public BaseSensor {
  private:
   void readSensor() override;
@@ -19,4 +19,4 @@ class Baro : public BaseSensor {
   Baro(const ros::NodeHandle& nh_private);
   ~Baro();
 };
-}  // namespace rio
+}  // namespace mav_sensors_ros

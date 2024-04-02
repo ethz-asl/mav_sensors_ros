@@ -1,9 +1,9 @@
-#include "rio/ros/base_sensor.h"
+#include "mav_sensors_ros/base_sensor.h"
 
 #include <log++.h>
 #include <std_msgs/Header.h>
 
-using namespace rio;
+using namespace mav_sensors_ros;
 
 BaseSensor::BaseSensor(const ros::NodeHandle& nh_private) : nh_private_(nh_private) {}
 

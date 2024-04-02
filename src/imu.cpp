@@ -1,4 +1,4 @@
-#include "rio/ros/imu.h"
+#include "mav_sensors_ros/imu.h"
 
 #include <numeric>
 
@@ -7,9 +7,7 @@
 #include <mav_sensors_core/sensor_config.h>
 #include <sensor_msgs/Imu.h>
 
-#include "rio/common.h"
-
-using namespace rio;
+using namespace mav_sensors_ros;
 
 Imu::Imu(const ros::NodeHandle& nh_private) : BaseSensor(nh_private) {}
 
@@ -95,7 +93,7 @@ void Imu::readSensor() {
       std::get<2>(measurement).has_value()) {
     LOG_FIRST(I, 1, "Publishing first IMU measurement.");
     sensor_msgs::Imu imu_msg;
-    imu_msg.header.stamp = rio::toRosTime(std::get<2>(measurement).value());
+    imu_msg.header.stamp = toRosTime(std::get<2>(measurement).value());
     imu_msg.header.frame_id = frame_id_;
 
     imu_msg.angular_velocity.x = std::get<1>(measurement).value().x - b_g_.x;

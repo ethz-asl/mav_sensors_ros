@@ -4,9 +4,9 @@
 #include <nodelet/nodelet.h>
 #include <pluginlib/class_list_macros.h>
 
-#include "rio/ros/radar.h"
+#include "mav_sensors_ros/radar.h"
 
-namespace rio {
+namespace mav_sensors_ros {
 
 class RadarNodelet : public nodelet::Nodelet {
   virtual void onInit() {
@@ -20,6 +20,6 @@ class RadarNodelet : public nodelet::Nodelet {
 
   std::unique_ptr<Radar> radar_;
 };
-}  // namespace rio
+}  // namespace mav_sensors_ros
 
-PLUGINLIB_EXPORT_CLASS(rio::RadarNodelet, nodelet::Nodelet)
+PLUGINLIB_EXPORT_CLASS(mav_sensors_ros::RadarNodelet, nodelet::Nodelet)

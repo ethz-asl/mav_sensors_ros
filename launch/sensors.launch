@@ -44,12 +44,12 @@
     <arg name="visualize" default="false"/>
 
     <node pkg="nodelet" type="nodelet" name="$(arg nodelet_manager_name)" args="manager" cwd="node" output="screen" if="$(arg nodelet_manager_on)"/>
-    <node pkg="nodelet" type="nodelet" name="baro" args="load rio::BaroNodelet $(arg nodelet_manager_name)" output="screen" if="$(arg baro_on)">
+    <node pkg="nodelet" type="nodelet" name="baro" args="load mav_sensors_ros::BaroNodelet $(arg nodelet_manager_name)" output="screen" if="$(arg baro_on)">
 		<param name="path" value="$(arg baro_path)"/>
         <param name="frame_id" value="$(arg baro_frame_id)"/>
         <param name="poll_rate" value="$(arg baro_poll_rate)"/>
     </node>
-    <node pkg="nodelet" type="nodelet" name="imu" args="load rio::ImuNodelet $(arg nodelet_manager_name)" output="screen" if="$(arg imu_on)">
+    <node pkg="nodelet" type="nodelet" name="imu" args="load mav_sensors_ros::ImuNodelet $(arg nodelet_manager_name)" output="screen" if="$(arg imu_on)">
         <rosparam file="$(find rio)/cfg/imu.yaml" />
         <param name="path_acc" value="$(arg imu_path_acc)"/>
         <param name="path_gyro" value="$(arg imu_path_gyro)"/>
@@ -59,7 +59,7 @@
     </node>
 
     <group if="$(arg radar_on)">
-        <node pkg="nodelet" type="nodelet" name="radar" args="load rio::RadarNodelet $(arg nodelet_manager_name)" output="screen">
+        <node pkg="nodelet" type="nodelet" name="radar" args="load mav_sensors_ros::RadarNodelet $(arg nodelet_manager_name)" output="screen">
             <param name="path_cfg" value="$(arg radar_path_cfg)"/>
             <param name="path_data" value="$(arg radar_path_data)"/>
             <param name="frame_id" value="$(arg radar_frame_id)"/>
@@ -73,7 +73,7 @@
     </group>
 
     <group if="$(arg rio_on)">
-        <node pkg="nodelet" type="nodelet" name="rio" args="load rio::RioNodelet $(arg nodelet_manager_name)" output="screen">
+        <node pkg="nodelet" type="nodelet" name="rio" args="load mav_sensors_ros::RioNodelet $(arg nodelet_manager_name)" output="screen">
 			<rosparam file="$(find rio)/cfg/rio.yaml" />
             <param name="queue_size" value="$(arg rio_queue_size)"/>
             <param name="odom_frame_id" value="$(arg rio_odom_frame_id)"/>

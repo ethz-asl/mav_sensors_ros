@@ -9,7 +9,7 @@
 // It is configured at a fixed timer rate.
 // Additionally, on each callback it publishes a timestamp before reading the sensor data.
 // This can be used by the downstream sensor fusion to initialize a new state.
-namespace rio
+namespace mav_sensors_ros
 {
   class BaseSensor
   {
@@ -41,4 +41,4 @@ namespace rio
     // It publishes a timestamp and reads the sensor data.
     void timerCallback(const ros::TimerEvent &event);
   };
-} // namespace rio
+} // namespace mav_sensors_ros

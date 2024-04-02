@@ -18,12 +18,9 @@ find_package(catkin REQUIRED COMPONENTS
             )
 find_package(Eigen3 REQUIRED)
 
-add_message_files()
-generate_messages(DEPENDENCIES std_msgs)
-
 catkin_package( INCLUDE_DIRS include ${catkin_INCLUDE_DIRS}
                 LIBRARIES ${PROJECT_NAME} ${PROJECT_NAME}_nodelet
-                CATKIN_DEPENDS roscpp lpp mav_sensors_drivers geometry_msgs sensor_msgs std_msgs roslib tf2_eigen nodelet std_srvs
+                CATKIN_DEPENDS roscpp lpp mav_sensors_drivers geometry_msgs sensor_msgs std_msgs tf2_eigen nodelet std_srvs
               )
 include_directories(include ${catkin_INCLUDE_DIRS})
 
