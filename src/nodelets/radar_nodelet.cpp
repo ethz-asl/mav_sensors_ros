@@ -13,7 +13,7 @@ class RadarNodelet : public nodelet::Nodelet {
     try {
       radar_ = std::make_unique<Radar>(getPrivateNodeHandle());
       if (!radar_->init()) radar_.release();
-    } catch (std::runtime_error e) {
+    } catch (std::runtime_error const& e) {
       LOG(E, "%s", e.what());
     }
   }

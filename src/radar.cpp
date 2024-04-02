@@ -10,35 +10,66 @@ using namespace mav_sensors_ros;
 
 namespace ms = mav_sensors;
 
-Radar::Radar(const ros::NodeHandle& nh_private) : BaseSensor(nh_private) {}
+Radar::Radar(const ros::NodeHandle &nh_private) : BaseSensor(nh_private) {}
 
 Radar::~Radar() { radar_.close(); }
 
-bool Radar::openSensor() {
+bool Radar::leastSquares(const mav_sensors::Radar &measurement,
+                         Eigen::Vector3d *velocity)
+{
+  if (measurement.cfar_detections.size() < 3)
+    return false;
+  // Get detection direction vector r and doppler velocity vd
+  Eigen::MatrixXd r(measurement.cfar_detections.size(), 3);
+  Eigen::VectorXd vd(measurement.cfar_detections.size());
+  for (size_t i = 0; i < measurement.cfar_detections.size(); i++)
+  {
+    r.row(i) << measurement.cfar_detections[i].x,
+        measurement.cfar_detections[i].y, measurement.cfar_detections[i].z;
+    r.rowwise().normalize();
+    vd(i) = measurement.cfar_detections[i].velocity;
+  }
+  // Compute least squares velocity estimate Ax = b, where A = r, b = vd
+  auto jacobiSvd = r.jacobiSvd(Eigen::ComputeThinU | Eigen::ComputeThinV);
+  if (jacobiSvd.rank() < 3)
+    return false;
+  else
+  {
+    *velocity = jacobiSvd.solve(vd);
+    return true;
+  }
+}
+
+bool Radar::openSensor()
+{
   ls_vel_pub_ =
       nh_private_.advertise<geometry_msgs::Vector3Stamped>("ls_velocity", 1);
   cfar_pub_ =
       nh_private_.advertise<sensor_msgs::PointCloud2>("cfar_detections", 1);
 
   std::string path_cfg;
-  if (!nh_private_.getParam("path_cfg", path_cfg)) {
+  if (!nh_private_.getParam("path_cfg", path_cfg))
+  {
     LOG(F, "Failed to read radar path_cfg.");
     return false;
   }
   std::string path_data;
-  if (!nh_private_.getParam("path_data", path_data)) {
+  if (!nh_private_.getParam("path_data", path_data))
+  {
     LOG(F, "Failed to read radar path_data.");
     return false;
   }
 
   std::string radar_cfg;
-  if (!nh_private_.getParam("radar_cfg", radar_cfg)) {
+  if (!nh_private_.getParam("radar_cfg", radar_cfg))
+  {
     LOG(F, "Failed to read radar radar_cfg.");
     return false;
   }
 
   std::string trigger;
-  if (!nh_private_.getParam("trigger", trigger)) {
+  if (!nh_private_.getParam("trigger", trigger))
+  {
     LOG(F, "Failed to read radar trigger.");
     return false;
   }
@@ -52,21 +83,25 @@ bool Radar::openSensor() {
   cfg.set("path_data", path_data);
   cfg.set("trigger", trigger);
 
-  if (trigger == "true") {
+  if (trigger == "true")
+  {
     std::string trigger_delay;
-    if (!nh_private_.getParam("trigger_delay", trigger_delay)) {
+    if (!nh_private_.getParam("trigger_delay", trigger_delay))
+    {
       LOG(F, "Failed to read radar trigger_delay.");
       return false;
     }
 
     std::string trigger_gpio;
-    if (!nh_private_.getParam("trigger_gpio", trigger_gpio)) {
+    if (!nh_private_.getParam("trigger_gpio", trigger_gpio))
+    {
       LOG(F, "Failed to read radar trigger_gpio.");
       return false;
     }
 
     std::string trigger_gpio_name;
-    if (!nh_private_.getParam("trigger_gpio_name", trigger_gpio_name)) {
+    if (!nh_private_.getParam("trigger_gpio_name", trigger_gpio_name))
+    {
       LOG(F, "Failed to read radar trigger_gpio_name.");
       return false;
     }
@@ -77,7 +112,8 @@ bool Radar::openSensor() {
   }
 
   radar_.setConfig(cfg);
-  if (!radar_.open()) {
+  if (!radar_.open())
+  {
     LOG(F, "Failed to open radar.");
     return false;
   }
@@ -85,7 +121,8 @@ bool Radar::openSensor() {
   return true;
 }
 
-void Radar::readSensor() {
+void Radar::readSensor()
+{
   // Read sensor data.
   auto measurement = radar_.read();
 
@@ -130,14 +167,15 @@ void Radar::readSensor() {
   msg.fields[5].count = 1;
 
   int n = 1;
-  msg.is_bigendian = *(char*)&n != 1;
+  msg.is_bigendian = *(char *)&n != 1;
   msg.point_step = 20;
   msg.row_step = msg.point_step * msg.width;
   msg.is_dense = true;
 
   msg.data.resize(msg.row_step * msg.height);
   for (size_t i = 0;
-       i < std::get<ms::Radar>(measurement).cfar_detections.size(); i++) {
+       i < std::get<ms::Radar>(measurement).cfar_detections.size(); i++)
+  {
     char x[sizeof(float)];
     memcpy(x, &std::get<ms::Radar>(measurement).cfar_detections[i].x,
            sizeof(float));
@@ -187,7 +225,8 @@ void Radar::readSensor() {
 
   // RANSAC least squares fit to estimate linear velocity.
   Eigen::Vector3d velocity;
-  if (leastSquares(std::get<ms::Radar>(measurement), &velocity)) {
+  if (leastSquares(std::get<ms::Radar>(measurement), &velocity))
+  {
     LOG_FIRST(I, 1, "Publishing first radar least squares velocity estimate.");
     // Publish least squares velocity estimate.
     geometry_msgs::Vector3Stamped msg_velocity;
@@ -196,7 +235,9 @@ void Radar::readSensor() {
     msg_velocity.header.frame_id = frame_id_;
     tf2::toMsg(velocity, msg_velocity.vector);
     ls_vel_pub_.publish(msg_velocity);
-  } else {
+  }
+  else
+  {
     LOG(D, "Least squares failed.");
   }
 }
