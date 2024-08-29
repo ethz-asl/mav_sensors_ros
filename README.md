@@ -1,10 +1,14 @@
 # mav_sensors_ros
 ROS 1 interface to [mav_sensors](https://github.com/ethz-asl/mav_sensors).
 
-# Paper
+**Paper**: https://arxiv.org/pdf/2408.05764
 ```
-Girod, Rik, et al. "A robust baro-radar-inertial odometry m-estimator for multicopter navigation in cities and forests." IEEE Int. Conf. Multisensor Fusion
-Integration Intell. Syst., 2024, submitted
+@inproceedings{girod2024brio,
+author = {Rik Girod and Marco Hauswirth and Patrick Pfreundschuh and Mariano Biasio and Roland Siegwart},
+title = {A robust baro-radar-inertial odometry m-estimator for multicopter navigation in cities and forests},
+booktitle={IEEE Int. Conf. Multisensor Fusion Integration Intell. Syst.},
+year={2024}
+}
 ```
 
 # Related packages
