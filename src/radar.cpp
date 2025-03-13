@@ -209,7 +209,7 @@ void Radar::readSensor() {
 
     char y[sizeof(float)];
     float y_value = std::get<ms::Radar>(measurement).cfar_detections[i].y;
-    if (flip_y_) {
+    if (false) {
       y_value = -y_value;
     }
     memcpy(y, &y_value, sizeof(float));
@@ -219,8 +219,13 @@ void Radar::readSensor() {
     msg.data[i * msg.point_step + msg.fields[1].offset + 3] = y[3];
 
     char z[sizeof(float)];
-    memcpy(z, &std::get<ms::Radar>(measurement).cfar_detections[i].z,
-           sizeof(float));
+    float z_value = std::get<ms::Radar>(measurement).cfar_detections[i].z;
+    if (flip_z_) {
+      z_value = -z_value;
+    }
+    memcpy(z, &z_value, sizeof(float));
+    // memcpy(z, &std::get<ms::Radar>(measurement).cfar_detections[i].z,
+    //        sizeof(float));
     msg.data[i * msg.point_step + msg.fields[2].offset + 0] = z[0];
     msg.data[i * msg.point_step + msg.fields[2].offset + 1] = z[1];
     msg.data[i * msg.point_step + msg.fields[2].offset + 2] = z[2];

@@ -24,8 +24,8 @@
     <arg name="radar_trigger_delay" default="500" />
     <arg name="radar_trigger_gpio" default="389" />
     <arg name="radar_trigger_gpio_name" default="PG.06" />
-    <!-- flip_y (boolean): flips direction of y axis. If not defined, value is set to false. -->
-    <!--                   Flipping y-axis makes coordinate system right-handed. -->
+    <!-- flip_z (boolean): Flips direction of z axis. If not defined, value is set to false. -->
+    <!--                   Flipping z-axis makes coordinate system right-handed. -->
     <arg name="flip_y" default="false" />
 
     <arg name="imu_filter_on" default="true" />
