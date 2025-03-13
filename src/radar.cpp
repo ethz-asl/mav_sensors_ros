@@ -72,14 +72,14 @@ bool Radar::openSensor() {
   cfar_pub_ =
       nh_private_.advertise<sensor_msgs::PointCloud2>("cfar_detections", 1);
 
-  // flip_y_: boolean to flip sign of y coordinate, default false.
+  // flip_z_: boolean to flip sign of z coordinate, default false.
   //          Makes tiawr18xx radar frame a right-handed coordinate system.
-  if (!nh_private_.getParam("flip_y", flip_y_)) {
-    LOG(I, "flip_y not set, defaulting to false.");
+  if (!nh_private_.getParam("flip_z", flip_z_)) {
+    LOG(I, "flip_z (boolean) not set, defaulting to 'false'.");
     LOG(I, "Radar frame is left-handed!");
   }
   else {
-    LOG(I, "Radar frame is right-handed! (y-axis flipped)");
+    LOG(I, "Radar frame is right-handed! (z-axis flipped)");
   }
   
   std::string path_cfg;
