@@ -72,6 +72,16 @@ bool Radar::openSensor() {
   cfar_pub_ =
       nh_private_.advertise<sensor_msgs::PointCloud2>("cfar_detections", 1);
 
+  // flip_z_: boolean to flip sign of z coordinate, default false.
+  //          Makes tiawr18xx radar frame a right-handed coordinate system.
+  if (!nh_private_.getParam("flip_z", flip_z_)) {
+    LOG(I, "flip_z (boolean) not set, defaulting to 'false'.");
+    LOG(I, "Radar frame is left-handed!");
+  }
+  else {
+    LOG(I, "Radar frame is right-handed! (z-axis flipped)");
+  }
+  
   std::string path_cfg;
   if (!nh_private_.getParam("path_cfg", path_cfg)) {
     LOG(F, "Failed to read radar path_cfg.");
@@ -206,8 +216,11 @@ void Radar::readSensor() {
     msg.data[i * msg.point_step + msg.fields[1].offset + 3] = y[3];
 
     char z[sizeof(float)];
-    memcpy(z, &std::get<ms::Radar>(measurement).cfar_detections[i].z,
-           sizeof(float));
+    float z_value = std::get<ms::Radar>(measurement).cfar_detections[i].z;
+    if (flip_z_) {
+      z_value = -z_value;
+    }
+    memcpy(z, &z_value, sizeof(float));
     msg.data[i * msg.point_step + msg.fields[2].offset + 0] = z[0];
     msg.data[i * msg.point_step + msg.fields[2].offset + 1] = z[1];
     msg.data[i * msg.point_step + msg.fields[2].offset + 2] = z[2];

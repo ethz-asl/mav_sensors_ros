@@ -17,3 +17,11 @@ year={2024}
 | --------------- | --------------------------------- | ------------------------------------------------------ |
 | rio             | radar-inertial odometry estimator | [rio](https://github.com/ethz-asl/rio)                 |
 | mav_sensors     | Linux user space sensor drivers   | [mav_sensors](https://github.com/ethz-asl/mav_sensors) |
+
+
+# TIAWR1843AOP Radar Coordinate Frame
+The radar sensor uses by default a left-handed coordinate frame. A new parameter `flip_z` (boolean) is introduced, with which the frame can be made right-handed.
+
+> **Attention:** the original implementation of RIO makes use of the original TIAWR1843AOP LH coordinate frame!
+
+![TIAWR1843AOP Coordinate Frame](TICoordinateFrame.svg)

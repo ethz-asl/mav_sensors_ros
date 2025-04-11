@@ -44,6 +44,8 @@ class Radar : public BaseSensor {
   void readSensor() override;
   bool openSensor() override;
 
+  bool flip_z_ = false; // Flip sign of z coordinate to make radar frame right-handed.
+
   mav_sensors::Xwr18XxMmwDemo radar_;
   ros::Publisher ls_vel_pub_;
   ros::Publisher cfar_pub_;
